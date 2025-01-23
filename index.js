@@ -1,15 +1,18 @@
-const { Client, Intents } = require('discord.js');
+require('dotenv').config();
+const { Client, GatewayIntentBits } = require('discord.js');
 const axios = require('axios');
 
 // Replace with your bot token from Discord Developer Portal
-const DISCORD_BOT_TOKEN = 'your-discord-bot-token';
-
-const client = new Client({
-    intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MEMBERS],
-});
-
+const DISCORD_BOT_TOKEN = process.env.BOT_TOKEN
 // LibreTranslate API URL (no API key required for public instance)
 const TRANSLATE_API_URL = 'https://libretranslate.com/translate';
+
+const client = new Client({
+    intents: [
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildMembers,
+    ],
+});
 
 // Function to translate text to Bangla
 async function translateToBangla(text) {
@@ -53,4 +56,6 @@ client.on('guildMemberAdd', async (member) => {
 });
 
 // Log in the bot
-client.login(DISCORD_BOT_TOKEN);
+client.login(DISCORD_BOT_TOKEN)
+    .then(() => console.log('Bot logged in successfully!'))
+    .catch((err) => console.error('Login failed:', err.message));
